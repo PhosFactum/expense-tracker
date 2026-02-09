@@ -10,4 +10,5 @@ type Usecase interface {
 	AddExpenseUsecase(expense model.Expense) error
 	EditExpenseUsecase(id int, updExpense model.Expense) error
 	DeleteExpenseUsecase(id int) error
+	ExpenseExistsUsecase(id int) bool
 }

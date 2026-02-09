@@ -43,6 +43,10 @@ func (r *ExpenseRepository) Create(expense model.Expense) error {
 // Update: метод для обновления старой траты по конкретным полям
 func (r *ExpenseRepository) Update(id int, updExpense model.Expense) error {
 	// Итерируемся по всем тратам и, найдя нужную, редактируем её, предварительно валидируя
+	if id <= 0 {
+		return errors.New("index must be positive")
+	}
+
 	for i, e := range r.expenses {
 		if e.ID == id {
 			// Проверяем валидность нового описания и новой суммы траты
@@ -61,7 +65,7 @@ func (r *ExpenseRepository) Update(id int, updExpense model.Expense) error {
 // Delete: метод для удаления траты по идентификатору
 func (r *ExpenseRepository) Delete(id int) error {
 	if id <= 0 {
-		return errors.New("invalid index: must be positive")
+		return errors.New("index must be positive")
 	}
 
 	// Удаляем запись через складывание двух срезов
@@ -73,3 +77,14 @@ func (r *ExpenseRepository) Delete(id int) error {
 	}
 	return errors.New("expense not found")
 }
+
+// Exists: проверяет, существует ли трата с данным ID
+func (r *ExpenseRepository) Exists(id int) bool {
+	for _, e := range r.expenses {
+		if e.ID == id {
+			return true
+		}
+	}
+	return false
+}
+

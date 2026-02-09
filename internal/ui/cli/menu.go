@@ -2,8 +2,6 @@ package cli
 
 import (
 	"github.com/PhosFactum/expense-tracker/internal/usecase"
-	"strings"
-	"fmt"
 	"os"
 )
 

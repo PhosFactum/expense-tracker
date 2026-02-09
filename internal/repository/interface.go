@@ -10,6 +10,7 @@ type Repository interface {
 	Create(expense model.Expense) error
 	Update(id int, updExpense model.Expense) error
 	Delete(id int) error
+	Exists(id int) bool
 	// SummarizeAll()
 	// SummarizeByMonth()
 }

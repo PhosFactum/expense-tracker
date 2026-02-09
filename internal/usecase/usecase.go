@@ -57,3 +57,9 @@ func (u *ExpenseUsecase) EditExpenseUsecase(id int, updExpense model.Expense) er
 func (u *ExpenseUsecase) DeleteExpenseUsecase(id int) error {
 	return u.repo.Delete(id)
 }
+
+// ExpenseExistsUsecase: проверка существования траты
+func (u *ExpenseUsecase) ExpenseExistsUsecase(id int) bool {
+	return u.repo.Exists(id)
+}
+

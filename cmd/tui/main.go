@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	app := NewApp()
+	app := app.NewApp()
 	app.TUIHandler.Run()
 }

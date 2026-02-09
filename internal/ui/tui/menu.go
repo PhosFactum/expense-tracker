@@ -6,11 +6,11 @@ import (
 )
 
 // RunTUI: функция для запуска TUI
-func RunTUI() {
+func (h *TUIHandler) Run() {
 	fmt.Println("=== Expense Tracker ===\n")
 
-	var choice int
 	for {
+		fmt.Println()
 		fmt.Println("--------------------------")
 		fmt.Println("| 0. Exit                |")
 		fmt.Println("| 1. Show expenses       |")
@@ -21,8 +21,13 @@ func RunTUI() {
 		fmt.Println("| 6. Summary by month    |")
 		fmt.Println("| 7. Export data to CSV  |")
 		fmt.Println("--------------------------")
-
+		fmt.Println("|")
+		  fmt.Print("|> Your choice: ")
 		choice, err := input.GetInt()
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue
+		}
 		if choice < 0 || choice > 7 {
 			fmt.Println("Invalid choice, try again!")
 			continue
@@ -31,15 +36,15 @@ func RunTUI() {
 		switch(choice) {
 			case 0:
 				fmt.Println("--- Program was terminated ---")
-				break
+				return
 			case 1:
-				showExpensesHandler()
+				h.showExpensesHandler()
 			case 2:
-				addExpenseHandler()
+				h.addExpenseHandler()
 			case 3:
-				updateExpenseHandler()
+				h.updateExpenseHandler()
 			case 4:
-				deleteExpenseHandler()
+				h.deleteExpenseHandler()
 			case 5:
 				fmt.Println("Summary by all time: will be soon...")
 			case 6:

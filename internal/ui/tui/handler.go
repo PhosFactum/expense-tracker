@@ -32,9 +32,9 @@ func (h *TUIHandler) showExpensesHandler() {
 	if len(expenses) == 0 {
 		fmt.Println("No expenses found")
 		return
-
+	}
 	for i, e := range expenses {
-		fmt.Printf("%d. %s - %.2f\n", i, e.Description, e.Amount) 
+		fmt.Printf("%d. %s - %.2f\n", i+1, e.Description, e.Amount) 
 	}
 }
 
@@ -46,11 +46,13 @@ func (h *TUIHandler) addExpenseHandler() {
 	amount, err := input.GetFloat() 
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
 	} 
 	fmt.Print("Type description: ")
 	description, err := input.GetString() 
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
 	}
 
 	expense := model.Expense{
@@ -63,28 +65,37 @@ func (h *TUIHandler) addExpenseHandler() {
 		fmt.Printf("Error: %v", err)	
 		return
 	}
-	fmt.Println("New expense added!")
+	
+	fmt.Println("Expense added successfully!")
 }
 
-// showExpensesHandler: ручка для вывода всех трат
+// updateExpenseHandler: ручка для обновления траты
 func (h *TUIHandler) updateExpenseHandler() {
 	fmt.Println("--- Updating old expense by id ---")
 
 	fmt.Print("ID of expense: ")
-	id, err := input.GetFloat()
+	id, err := input.GetInt()
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
+	}
+
+	if !h.usecase.ExpenseExistsUsecase(id) {
+		fmt.Println("Expense with this ID does not exist")
+		return
 	}
 
 	fmt.Print("Type new amount: ")
 	newAmount, err := input.GetFloat() 
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
 	} 
 	fmt.Print("Type new description: ")
 	newDesc, err := input.GetString() 
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
 	}
 
 	updExpense := model.Expense{
@@ -96,6 +107,8 @@ func (h *TUIHandler) updateExpenseHandler() {
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 	}
+
+	fmt.Println("Expense updated successfully!")
 }
 
 // showExpensesHandler: ручка для вывода всех трат
@@ -103,13 +116,21 @@ func (h *TUIHandler) deleteExpenseHandler() {
 	fmt.Println("--- Deleting old expense by id ---")
 	
 	fmt.Print("ID of expense: ")
-	id, err := input.GetFloat()
+	id, err := input.GetInt()
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
+	}
+
+	if !h.usecase.ExpenseExistsUsecase(id) {
+		fmt.Println("Expense with this ID does not exist")
+		return
 	}
 
 	err = h.usecase.DeleteExpenseUsecase(id)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 	}
+
+	fmt.Println("Expense deleted successfully!")
 }

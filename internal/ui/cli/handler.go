@@ -1,4 +1,4 @@
-package tui
+package cli
 
 import (
 	"github.com/PhosFactum/expense-tracker/internal/usecase"
@@ -32,7 +32,7 @@ func (h *CLIHandler) showExpensesHandler() {
 	if len(expenses) == 0 {
 		fmt.Println("No expenses found")
 		return
-
+	}
 	for i, e := range expenses {
 		fmt.Printf("%d. %s - %.2f\n", i, e.Description, e.Amount) 
 	}
