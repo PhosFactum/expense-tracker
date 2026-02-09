@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	app := app.NewApp()
-	app.CLIHandler.Run()
+	app := app.NewApp()   // Создали экземпляр приложения (со всеми зависимостями)
+	app.CLIHandler.Run()  // Запустили метод хэндлера Run (CLI)
 }

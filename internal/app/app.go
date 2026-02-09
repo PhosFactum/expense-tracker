@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/PhosFactum/expense-tracker/internal/repository"
 	"github.com/PhosFactum/expense-tracker/internal/usecase"
-	//"github.com/PhosFactum/expense-tracker/internal/ui/cli"
+	"github.com/PhosFactum/expense-tracker/internal/ui/cli"
 	"github.com/PhosFactum/expense-tracker/internal/ui/tui"
 )
 
@@ -11,7 +11,7 @@ import (
 type App struct {
 	Repo *repository.ExpenseRepository
 	UC *usecase.ExpenseUsecase
-	//CLIHandler *cli.CLIHandler
+	CLIHandler *cli.CLIHandler
 	TUIHandler *tui.TUIHandler
 }
 
@@ -19,14 +19,15 @@ type App struct {
 func NewApp() *App {
 	repo := repository.NewExpenseRepository()
 	uc := usecase.NewExpenseUsecase(repo)
+
 	// Дробим хэндлеры на CLI-часть и TUI-часть
-	//clihandler := cli.NewCLIHandler(uc)
+	clihandler := cli.NewCLIHandler(uc)
 	tuihandler := tui.NewTUIHandler(uc)
 
 	return &App{
 		Repo: repo,
 		UC: uc,
-		//CLIHandler: clihandler,
+		CLIHandler: clihandler,
 		TUIHandler: tuihandler,
 	}
 }

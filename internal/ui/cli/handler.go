@@ -3,11 +3,10 @@ package cli
 import (
 	"github.com/PhosFactum/expense-tracker/internal/usecase"
 	"github.com/PhosFactum/expense-tracker/internal/model"
-	"github.com/PhosFactum/expense-tracker/pkg/input"
 	"fmt"
 )
 
-// TUIHandler: структура для хэндлера для CLI
+// CLIHandler: структура для хэндлера для CLI
 type CLIHandler struct {
 	usecase *usecase.ExpenseUsecase
 }
@@ -20,12 +19,10 @@ func NewCLIHandler(uc *usecase.ExpenseUsecase) *CLIHandler {
 }
 
 // showExpensesHandler: ручка для вывода всех трат
-func (h *CLIHandler) showExpensesHandler() {
-	fmt.Println("--- List of all expenses ---")
-
+func (h *CLIHandler) List() {
 	expenses, err := h.usecase.ShowExpensesUsecase()
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Println("Error:", err)
 		return
 	}
 
@@ -33,83 +30,51 @@ func (h *CLIHandler) showExpensesHandler() {
 		fmt.Println("No expenses found")
 		return
 	}
-	for i, e := range expenses {
-		fmt.Printf("%d. %s - %.2f\n", i, e.Description, e.Amount) 
+
+	for _, e := range expenses {
+		fmt.Printf("%d. | %.2f | - %s\n", e.ID, e.Amount, e.Description) 
 	}
 }
 
 // addExpenseHandler: ручка для создания новой траты
-func (h *TUIHandler) addExpenseHandler() {
-	fmt.Println("--- Adding new expense ---")
-
-	fmt.Print("Type amount: ")
-	amount, err := input.GetFloat() 
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	} 
-	fmt.Print("Type description: ")
-	description, err := input.GetString() 
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	}
-
+func (h *CLIHandler) Add(amount float64, desc string) {
 	expense := model.Expense{
 		Amount: amount,
-		Description: description,
+		Description: desc,
 	}
 
-	err = h.usecase.AddExpenseUsecase(expense)
+	err := h.usecase.AddExpenseUsecase(expense)
 	if err != nil {
-		fmt.Printf("Error: %v", err)	
+		fmt.Println("Error:", err)	
 		return
 	}
-	fmt.Println("New expense added!")
+
+	fmt.Println("Expense added!")
 }
 
 // showExpensesHandler: ручка для вывода всех трат
-func (h *TUIHandler) updateExpenseHandler() {
-	fmt.Println("--- Updating old expense by id ---")
-
-	fmt.Print("ID of expense: ")
-	id, err := input.GetFloat()
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	}
-
-	fmt.Print("Type new amount: ")
-	newAmount, err := input.GetFloat() 
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	} 
-	fmt.Print("Type new description: ")
-	newDesc, err := input.GetString() 
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	}
-
-	updExpense := model.Expense{
-		Amount: newAmount,
-		Description: newDesc,
+func (h *CLIHandler) Update(id int, amount float64, desc string) {
+	expense := model.Expense{
+		Amount: amount,
+		Description: desc,
 	}
 	
-	err = h.usecase.EditExpenseUsecase(id, updExpense)
+	err := h.usecase.EditExpenseUsecase(id, expense)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Println("Error:", err)
+		return
 	}
+
+	fmt.Println("Expense updated!")
 }
 
 // showExpensesHandler: ручка для вывода всех трат
-func (h *TUIHandler) deleteExpenseHandler() {
-	fmt.Println("--- Deleting old expense by id ---")
-	
-	fmt.Print("ID of expense: ")
-	id, err := input.GetFloat()
+func (h *CLIHandler) Delete(id int) {
+	err := h.usecase.DeleteExpenseUsecase(id)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Println("Error:", err)
+		return
 	}
 
-	err = h.usecase.DeleteExpenseUsecase(id)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-	}
+	fmt.Println("Expense deleted!")
 }

@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	app := app.NewApp()
-	app.TUIHandler.Run()
+	app := app.NewApp()    // Создали экземпляр приложения с зависимостями
+	app.TUIHandler.Run()   // Запустили метод хэндлера Run (TUI)
 }
